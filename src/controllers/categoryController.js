@@ -1,4 +1,5 @@
 const Category = require('../models/categoryModel.js');
+const Product = require('../models/productModel.js');
 const mongoose = require('mongoose');
 
 /**
@@ -9,10 +10,14 @@ const createCategory = async (req, res) => {
   try {
     const category = new Category({ name, parent });
     await category.save();
-    return res.status(201).json({ message: "קטגוריה נוספה בהצלחה", data: category });
+    return res
+      .status(201)
+      .json({ message: 'קטגוריה נוספה בהצלחה', data: category });
   } catch (err) {
     console.error(err.message);
-    return res.status(500).json({ message: "שגיאת בשרת בעת יצירת קטגוריה", error: err.message });
+    return res
+      .status(500)
+      .json({ message: 'שגיאת בשרת בעת יצירת קטגוריה', error: err.message });
   }
 };
 
@@ -23,12 +28,14 @@ const getAllCategories = async (req, res) => {
   try {
     const categories = await Category.find().populate('parent', 'name');
     if (!categories || categories.length === 0) {
-      return res.status(404).json({ message: "לא נמצאו קטגוריות" });
+      return res.status(404).json({ message: 'לא נמצאו קטגוריות' });
     }
     return res.status(200).json({ data: categories });
   } catch (err) {
     console.error(err.message);
-    return res.status(500).json({ message: "שגיאת בשרת בעת שליפת קטגוריות", error: err.message });
+    return res
+      .status(500)
+      .json({ message: 'שגיאת בשרת בעת שליפת קטגוריות', error: err.message });
   }
 };
 
@@ -41,7 +48,10 @@ const getMainCategories = async (req, res) => {
     return res.status(200).json({ data: categories });
   } catch (err) {
     console.error(err.message);
-    return res.status(500).json({ message: "שגיאת בשרת בעת שליפת קטגוריות ראשיות", error: err.message });
+    return res.status(500).json({
+      message: 'שגיאת בשרת בעת שליפת קטגוריות ראשיות',
+      error: err.message,
+    });
   }
 };
 
@@ -53,22 +63,23 @@ const getSubCategories = async (req, res) => {
 
   try {
     if (!mongoose.Types.ObjectId.isValid(parentId)) {
-      return res.status(400).json({ message: "ParentId לא חוקי" });
+      return res.status(400).json({ message: 'ParentId לא חוקי' });
     }
 
     // פשוט משווים למחרוזת – Mongoose יתמודד עם ObjectId
     const subCategories = await Category.find({ parent: parentId });
 
     if (!subCategories || subCategories.length === 0) {
-      return res.status(404).json({ message: "לא נמצאו תתי קטגוריות עבור קטגוריה זו" });
+      return res
+        .status(404)
+        .json({ message: 'לא נמצאו תתי קטגוריות עבור קטגוריה זו' });
     }
 
     return res.status(200).json({ data: subCategories });
-
   } catch (err) {
     console.error(err.message);
     return res.status(500).json({
-      message: "שגיאת בשרת בעת שליפת תתי קטגוריות",
+      message: 'שגיאת בשרת בעת שליפת תתי קטגוריות',
       error: err.message,
     });
   }
@@ -80,14 +91,20 @@ const updateCategory = async (req, res) => {
   const id = req.params.id;
   const updatedData = req.body;
   try {
-    const category = await Category.findByIdAndUpdate(id, updatedData, { new: true });
+    const category = await Category.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
     if (!category) {
       return res.status(404).json({ message: `קטגוריה ${id} לא נמצאה` });
     }
-    return res.status(200).json({ message: "קטגוריה עודכנה בהצלחה", data: category });
+    return res
+      .status(200)
+      .json({ message: 'קטגוריה עודכנה בהצלחה', data: category });
   } catch (err) {
     console.error(err.message);
-    return res.status(500).json({ message: "שגיאת בשרת בעת עדכון קטגוריה", error: err.message });
+    return res
+      .status(500)
+      .json({ message: 'שגיאת בשרת בעת עדכון קטגוריה', error: err.message });
   }
 };
 
@@ -102,7 +119,7 @@ const deleteCategory = async (req, res) => {
 
     if (productsInCategory.length > 0) {
       return res.status(400).json({
-        message: "לא ניתן למחוק קטגוריה זו, קיימים מוצרים המשויכים אליה.",
+        message: 'לא ניתן למחוק קטגוריה זו, קיימים מוצרים המשויכים אליה.',
         count: productsInCategory.length,
       });
     }
@@ -111,7 +128,7 @@ const deleteCategory = async (req, res) => {
     const subCategories = await Category.find({ parent: id });
     if (subCategories.length > 0) {
       return res.status(400).json({
-        message: "לא ניתן למחוק קטגוריה זו, קיימות תתי־קטגוריות המשויכות אליה.",
+        message: 'לא ניתן למחוק קטגוריה זו, קיימות תתי־קטגוריות המשויכות אליה.',
         count: subCategories.length,
       });
     }
@@ -122,12 +139,11 @@ const deleteCategory = async (req, res) => {
       return res.status(404).json({ message: `קטגוריה ${id} לא נמצאה` });
     }
 
-    return res.status(200).json({ message: "קטגוריה נמחקה בהצלחה" });
-
+    return res.status(200).json({ message: 'קטגוריה נמחקה בהצלחה' });
   } catch (err) {
     console.error(err.message);
     return res.status(500).json({
-      message: "שגיאת בשרת בעת מחיקת קטגוריה",
+      message: 'שגיאת בשרת בעת מחיקת קטגוריה',
       error: err.message,
     });
   }
@@ -139,5 +155,5 @@ module.exports = {
   getMainCategories,
   getSubCategories,
   updateCategory,
-  deleteCategory
+  deleteCategory,
 };

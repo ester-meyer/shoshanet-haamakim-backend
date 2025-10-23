@@ -2,7 +2,7 @@ name: Lint & Format Check
 
 on:
   pull_request:
-    branches: [ main, production, test ]
+    branches: [main, production, test]
 
 jobs:
   lint:

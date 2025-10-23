@@ -6,7 +6,7 @@ const {
   getMainCategories,
   getSubCategories,
   updateCategory,
-  deleteCategory
+  deleteCategory,
 } = require('../controllers/categoryController.js');
 
 // יצירת קטגוריה חדשה
