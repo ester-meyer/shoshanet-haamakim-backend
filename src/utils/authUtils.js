@@ -1,6 +1,5 @@
-const crypto = require("crypto");
-const bcrypt = require("bcrypt");
-const { sendMail } = require("./emailUtils");
+const bcrypt = require('bcrypt');
+const { sendMail } = require('./emailUtils');
 
 const genNumericCode = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -15,7 +14,7 @@ const createAndSendMagicCode = async (admin, expiresMinutes = 15) => {
   admin.magicCodeExpires = expires;
   await admin.save();
 
-  const subject = "קוד חד־פעמי לכניסה";
+  const subject = 'קוד חד־פעמי לכניסה';
   const text = `הקוד שלך: ${code}. הוא תקף ל־${expiresMinutes} דקות. לא למסור לאחרים.`;
   await sendMail(admin.email, subject, text);
 

@@ -3,17 +3,17 @@ const transport = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'mindy05832@gmail.com',
-    pass: process.env.EMAIL_PASSWORD
-  }
-})
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
 
-const FROM_EMAIL = process.env.FROM_EMAIL
-const TO_EMAIL = process.env.TO_EMAIL
+const FROM_EMAIL = process.env.FROM_EMAIL;
+const TO_EMAIL = process.env.TO_EMAIL;
 
 const sendMail = async (req, res) => {
   const { name, message, email, phone } = req.body;
   if (!email) {
-    return res.status(400).json({ message: "Email not provided" });
+    return res.status(400).json({ message: 'Email not provided' });
   }
 
   try {
@@ -42,14 +42,13 @@ const sendMail = async (req, res) => {
         </div>`,
     });
 
-    console.log("Both emails sent customer ",fromEmail);
-    res.status(200).json({ message: "Emails sent successfully" });
-
+    res.status(200).json({ message: 'Emails sent successfully' });
   } catch (err) {
-    console.error("Error in sendMail:", err.message);
-    res.status(500).json({ message: "Failed to send email", error: err.message });
+    console.error('Error in sendMail:', err.message);
+    res
+      .status(500)
+      .json({ message: 'Failed to send email', error: err.message });
   }
 };
 
-
-module.exports = { sendMail }
+module.exports = { sendMail };
