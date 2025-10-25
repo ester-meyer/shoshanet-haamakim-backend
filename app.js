@@ -21,7 +21,6 @@ cloudinary.config({
   secure: true,
 });
 
-
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static('public'));

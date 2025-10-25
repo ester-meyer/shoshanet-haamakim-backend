@@ -11,9 +11,13 @@ const login = (req, res) => {
   }
 
   try {
-    const token = jwt.sign({ role: 'admin', username }, process.env.JWT_SECRET, {
-      expiresIn: '1d',
-    });
+    const token = jwt.sign(
+      { role: 'admin', username },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '1d',
+      },
+    );
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -21,7 +25,9 @@ const login = (req, res) => {
     });
   } catch (err) {
     console.error('Error during login:', err);
-    return res.status(500).json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
+    return res
+      .status(500)
+      .json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
   }
 
   return res.status(200).json({ message: 'התחברת בהצלחה' });
