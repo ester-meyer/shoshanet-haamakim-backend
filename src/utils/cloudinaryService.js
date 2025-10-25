@@ -24,7 +24,7 @@ const uploadImage = (fileBuffer) => {
 const deleteImage = async (publicId) => {
   try {
     const result = await cloudinary.uploader.destroy(publicId);
-    console.log('Deleted:', result);
+    console.warn('Deleted:', result);
     return result;
   } catch (error) {
     console.error('Delete error:', error);

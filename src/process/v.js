@@ -11,9 +11,9 @@ async function checkCloudinaryUsage() {
     const usage = await cloudinary.api.usage();
     const percent = usage.credits.used_percent;
 
-    console.log('Cloudinary usage:', percent, '%');
+    console.warn('Cloudinary usage:', percent, '%');
 
-    if (percent >= 0) {
+    if (percent >= 80) {
       await sendMail(
         {
           body: {
@@ -29,12 +29,11 @@ async function checkCloudinaryUsage() {
           }),
         },
       );
-      console.log('התראה נשלחה במייל 🚨');
     }
   } catch (err) {
     console.error('שגיאה בבדיקת Cloudinary:', err.message);
   }
 }
 
-// להריץ כל יום ב-15:00
-cron.schedule('0 15 * * *', checkCloudinaryUsage);
+// להריץ ב-15:00 ביום הראשון של כל חודש
+cron.schedule('0 15 1 * *', checkCloudinaryUsage);

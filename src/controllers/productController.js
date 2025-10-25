@@ -8,9 +8,7 @@ const createProduct = async (req, res) => {
     // מציאת הקטגוריה לפי שם
     const categoryData = await Category.findById(category);
     if (!categoryData) {
-      return res
-        .status(404)
-        .json({ message: `קטגוריה בשם ${category} לא נמצאה` });
+      return res.status(404).json({ message: `קטגוריה בשם ${category} לא נמצאה` });
     }
 
     // העלאת התמונה
@@ -27,14 +25,10 @@ const createProduct = async (req, res) => {
 
     // שמירת המוצר במסד הנתונים
     await newProduct.save();
-    return res
-      .status(201)
-      .json({ message: 'מוצר נוסף בהצלחה!', data: newProduct });
+    return res.status(201).json({ message: 'מוצר נוסף בהצלחה!', data: newProduct });
   } catch (err) {
     console.error(err.message);
-    return res
-      .status(500)
-      .json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
+    return res.status(500).json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
   }
 };
 
@@ -48,9 +42,7 @@ const getProduct = async (req, res) => {
     return res.status(200).json({ data: product });
   } catch (err) {
     console.error(err.message);
-    return res
-      .status(500)
-      .json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
+    return res.status(500).json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
   }
 };
 
@@ -62,31 +54,22 @@ const getProductsByCategory = async (req, res) => {
       ? (mainCategory = await Category.find({ name: category }))
       : (mainCategory = await Category.findById({ _id: category }));
 
-    console.log(mainCategory, category);
     if (!mainCategory || mainCategory.length === 0) {
       return res.status(404).json({ message: `קטגוריה ${category} לא נמצאה` });
     }
 
     const subCategories = await Category.find({ parent: mainCategory[0]._id });
-    const categoryIds = [
-      mainCategory[0]._id,
-      ...subCategories.map((c) => c._id),
-    ];
-    console.log(categoryIds);
+    const categoryIds = [mainCategory[0]._id, ...subCategories.map((c) => c._id)];
     const products = await Product.find({
       category: { $in: categoryIds },
     }).populate('category');
     if (!products || products.length === 0) {
-      return res
-        .status(404)
-        .json({ message: `לא נמצאו מוצרים בקטגוריה ${mainCategory[0].name}` });
+      return res.status(404).json({ message: `לא נמצאו מוצרים בקטגוריה ${mainCategory[0].name}` });
     }
     return res.status(200).json({ data: products });
   } catch (err) {
     console.error(err.message);
-    return res
-      .status(500)
-      .json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
+    return res.status(500).json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
   }
 };
 
@@ -94,14 +77,12 @@ const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find().populate('category');
     if (!products || products.length === 0) {
-      return res.status(404).json({ message: `לא נמצאו מוצרים` });
+      return res.status(404).json({ message: 'לא נמצאו מוצרים' });
     }
     return res.status(200).json({ data: products });
   } catch (err) {
     console.error(err.message);
-    return res
-      .status(500)
-      .json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
+    return res.status(500).json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
   }
 };
 
@@ -115,14 +96,10 @@ const updateProduct = async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: `מוצר ${id} לא נמצא` });
     }
-    return res
-      .status(200)
-      .json({ message: 'מוצר עודכן בהצלחה', data: product });
+    return res.status(200).json({ message: 'מוצר עודכן בהצלחה', data: product });
   } catch (err) {
     console.error(err.message);
-    return res
-      .status(500)
-      .json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
+    return res.status(500).json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
   }
 };
 
@@ -134,14 +111,13 @@ const deleteProduct = async (req, res) => {
       return res.status(404).json({ message: `מוצר ${id} לא נמצא` });
     }
     if (deleteImage(product.imageId)) {
-      console.log(`Image for product ${id} deleted successfully`);
+      return res.status(200).json({ message: 'המוצר נמחק בהצלחה' });
     }
-    return res.status(200).json({ message: 'המוצר נמחק בהצלחה' });
+    else
+      {return res.status(200).json({ message: 'המוצר נמחק בהצלחה אך לא הצלחנו למחוק את התמונה' });}
   } catch (err) {
     console.error(err.message);
-    return res
-      .status(500)
-      .json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
+    return res.status(500).json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
   }
 };
 

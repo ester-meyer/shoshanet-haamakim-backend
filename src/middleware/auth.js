@@ -10,9 +10,7 @@ const auth = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (err) {
-    return res
-      .status(401)
-      .json({ message: 'אין הרשאה, בבקשה התחבר שוב.', error: err.message });
+    return res.status(401).json({ message: 'אין הרשאה, בבקשה התחבר שוב.', error: err.message });
   }
 };
 

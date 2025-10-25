@@ -31,7 +31,7 @@ const sendMail = async (req, res) => {
     await transport.sendMail({
       from: FROM_EMAIL,
       to: email,
-      subject: `תודה על פנייתך לשושנת העמקים`,
+      subject: 'תודה על פנייתך לשושנת העמקים',
       html: `
         <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; direction: rtl; text-align: right;">
           <p>הי ${name}!</p>
@@ -45,9 +45,7 @@ const sendMail = async (req, res) => {
     res.status(200).json({ message: 'Emails sent successfully' });
   } catch (err) {
     console.error('Error in sendMail:', err.message);
-    res
-      .status(500)
-      .json({ message: 'Failed to send email', error: err.message });
+    res.status(500).json({ message: 'Failed to send email', error: err.message });
   }
 };
 

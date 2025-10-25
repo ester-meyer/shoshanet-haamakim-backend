@@ -1,5 +1,5 @@
-var corsOptions = {
-  origin: [process.env.FRONTEND_URL, process.env.FRONTEND_URL2],
+const corsOptions = {
+  origin: [process.env.FRONTEND_URL, process.env.FRONTEND_URL],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],

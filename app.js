@@ -21,7 +21,6 @@ cloudinary.config({
   secure: true,
 });
 
-console.log(cloudinary.config());
 
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -33,11 +32,11 @@ app.get('/', (req, res) => {
 });
 
 mongoose.connection.once('open', () => {
-  console.log('Connected to MongoDB');
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  console.warn('Connected to MongoDB');
+  app.listen(PORT, () => console.info(`Server running on port ${PORT}`));
 });
 mongoose.connection.on('error', (err) => {
-  console.log(err);
+  console.error(err);
 });
 
 app.use('/product', productRoutes);

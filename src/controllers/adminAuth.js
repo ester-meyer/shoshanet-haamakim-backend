@@ -7,23 +7,13 @@ const login = (req, res) => {
   const ADMIN_PASS = process.env.ADMIN_PASS;
 
   if (username !== ADMIN_USER || password !== ADMIN_PASS) {
-    console.log(
-      `Failed login attempt for user: ${username} to ${ADMIN_USER} and ${ADMIN_PASS} to ${password}`,
-    );
     return res.status(401).json({ message: 'שם משתמש או סיסמה שגויים' });
   }
 
   try {
-    // יצירת טוקן
-    const token = jwt.sign(
-      { role: 'admin', username },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: '1d',
-      },
-    );
-    console.log(`token: ${token}`);
-    // שמירת הטוקן בעוגייה
+    const token = jwt.sign({ role: 'admin', username }, process.env.JWT_SECRET, {
+      expiresIn: '1d',
+    });
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -31,9 +21,7 @@ const login = (req, res) => {
     });
   } catch (err) {
     console.error('Error during login:', err);
-    return res
-      .status(500)
-      .json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
+    return res.status(500).json({ message: 'שגיאת בשרת, דווח לנו בבקשה.', error: err.message });
   }
 
   return res.status(200).json({ message: 'התחברת בהצלחה' });

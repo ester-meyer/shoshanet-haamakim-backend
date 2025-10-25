@@ -10,14 +10,10 @@ const createCategory = async (req, res) => {
   try {
     const category = new Category({ name, parent });
     await category.save();
-    return res
-      .status(201)
-      .json({ message: 'קטגוריה נוספה בהצלחה', data: category });
+    return res.status(201).json({ message: 'קטגוריה נוספה בהצלחה', data: category });
   } catch (err) {
     console.error(err.message);
-    return res
-      .status(500)
-      .json({ message: 'שגיאת בשרת בעת יצירת קטגוריה', error: err.message });
+    return res.status(500).json({ message: 'שגיאת בשרת בעת יצירת קטגוריה', error: err.message });
   }
 };
 
@@ -33,9 +29,7 @@ const getAllCategories = async (req, res) => {
     return res.status(200).json({ data: categories });
   } catch (err) {
     console.error(err.message);
-    return res
-      .status(500)
-      .json({ message: 'שגיאת בשרת בעת שליפת קטגוריות', error: err.message });
+    return res.status(500).json({ message: 'שגיאת בשרת בעת שליפת קטגוריות', error: err.message });
   }
 };
 
@@ -70,9 +64,7 @@ const getSubCategories = async (req, res) => {
     const subCategories = await Category.find({ parent: parentId });
 
     if (!subCategories || subCategories.length === 0) {
-      return res
-        .status(404)
-        .json({ message: 'לא נמצאו תתי קטגוריות עבור קטגוריה זו' });
+      return res.status(404).json({ message: 'לא נמצאו תתי קטגוריות עבור קטגוריה זו' });
     }
 
     return res.status(200).json({ data: subCategories });
@@ -97,14 +89,10 @@ const updateCategory = async (req, res) => {
     if (!category) {
       return res.status(404).json({ message: `קטגוריה ${id} לא נמצאה` });
     }
-    return res
-      .status(200)
-      .json({ message: 'קטגוריה עודכנה בהצלחה', data: category });
+    return res.status(200).json({ message: 'קטגוריה עודכנה בהצלחה', data: category });
   } catch (err) {
     console.error(err.message);
-    return res
-      .status(500)
-      .json({ message: 'שגיאת בשרת בעת עדכון קטגוריה', error: err.message });
+    return res.status(500).json({ message: 'שגיאת בשרת בעת עדכון קטגוריה', error: err.message });
   }
 };
 
