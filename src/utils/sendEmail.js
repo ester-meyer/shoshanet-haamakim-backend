@@ -1,11 +1,5 @@
-const nodemailer = require('nodemailer');
-const transport = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'mindy05832@gmail.com',
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const FROM_EMAIL = process.env.FROM_EMAIL;
 const TO_EMAIL = process.env.TO_EMAIL;
@@ -17,7 +11,8 @@ const sendMail = async (req, res) => {
   }
 
   try {
-    await transport.sendMail({
+    // מייל אליך
+    await sgMail.send({
       from: FROM_EMAIL,
       to: TO_EMAIL,
       subject: `הודעה מ${name}, מהאתר שושנת העמקים`,
@@ -28,7 +23,8 @@ const sendMail = async (req, res) => {
       `,
     });
 
-    await transport.sendMail({
+    // מייל חזרה ללקוח
+    await sgMail.send({
       from: FROM_EMAIL,
       to: email,
       subject: 'תודה על פנייתך לשושנת העמקים',
@@ -38,16 +34,14 @@ const sendMail = async (req, res) => {
           <p>תודה על פנייתך.</p>
           <p>ניצור איתך קשר בהקדם האפשרי.</p>
           <hr style="border:none; border-top:1px solid #eee; margin:20px 0;">
-          <a href="https://app.shoshanath.com/" style="font-size:0.9em; color:#777;">בקרו באתר שלנו</a>
+          <a href="${process.env.FRONTEND_URL}" style="font-size:0.9em; color:#777;">בקרו באתר שלנו</a>
         </div>`,
     });
 
     res.status(200).json({ message: 'Emails sent successfully' });
   } catch (err) {
-    console.error('Error in sendMail:', err.message);
-    res
-      .status(500)
-      .json({ message: 'Failed to send email', error: err.message });
+    console.error('Error in sendMail:', err);
+    res.status(500).json({ message: 'Failed to send email', error: err.message });
   }
 };
 
