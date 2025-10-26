@@ -34,7 +34,7 @@ const sendMail = async (req, res) => {
           <p>תודה על פנייתך.</p>
           <p>ניצור איתך קשר בהקדם האפשרי.</p>
           <hr style="border:none; border-top:1px solid #eee; margin:20px 0;">
-          <a href="${process.env.FRONTEND_URL}" style="font-size:0.9em; color:#777;">בקרו באתר שלנו</a>
+          <a href="https://shoshanet-haamakim-frontend.onrender.com/" style="font-size:0.9em; color:#777;">בקרו באתר שלנו</a>
         </div>`,
     });
 
