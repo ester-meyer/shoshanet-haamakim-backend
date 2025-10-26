@@ -20,8 +20,8 @@ const login = (req, res) => {
     );
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: true,
+      sameSite: 'none',
     });
   } catch (err) {
     console.error('Error during login:', err);
