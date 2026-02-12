@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const corsOptions = require('./src/config/corsOptions');
 const connectDB = require('./src/config/dbConn.js');
@@ -23,11 +24,22 @@ cloudinary.config({
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.static('public'));
 app.use(cookieParser());
 
-app.get('/', (req, res) => {
-  res.send('this is the home page');
+app.use('/api/product', productRoutes);
+app.use('/api/contact', contactRoutes);
+app.use('/api/admin', authRoutes);
+app.use('/api/categories', categoryRoutes);
+
+// Serve static files from dist folder
+app.use(express.static(path.join(__dirname, 'dist')));
+
+app.use((req, res, next) => {
+  if (!req.path.startsWith('/api')) {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  } else {
+    next();
+  }
 });
 
 mongoose.connection.once('open', () => {
@@ -37,8 +49,3 @@ mongoose.connection.once('open', () => {
 mongoose.connection.on('error', (err) => {
   console.error(err);
 });
-
-app.use('/product', productRoutes);
-app.use('/contact', contactRoutes);
-app.use('/admin', authRoutes);
-app.use('/categories', categoryRoutes);
